@@ -1,0 +1,101 @@
+--DDL HealthClinic;
+create database HealthClinic
+USE HealthClinic;
+
+CREATE TABLE tb_Usuario
+(
+IdUsuario INT PRIMARY KEY IDENTITY,
+TipodeUsuario VARCHAR(50) NOT NULL,
+)
+
+CREATE TABLE tb_Perfil
+(
+IdPerfil INT PRIMARY KEY IDENTITY,
+IdUsuario INT FOREIGN KEY REFERENCES tb_Usuario(IdUsuario),
+Nome VARCHAR (256) NOT NULL,
+DatadeNascimento date Not Null ,
+Sexo BIT,
+Email VARCHAR (256)NOT NULL,
+Senha VARCHAR (30)NOT NULL
+)
+
+CREATE TABLE tb_Especialidade
+(
+IdEspecialidade INT PRIMARY KEY IDENTITY,
+IdPerfil INT FOREIGN KEY REFERENCES tb_perfil(Idperfil)
+
+
+)
+CREATE TABLE tb_Medico
+(
+IdMedico INT PRIMARY KEY IDENTITY,
+IdPerfil INT FOREIGN KEY REFERENCES TB_Perfil(IdPerfil),
+IDESPECIALIDADE INT FOREIGN KEY REFERENCES TB_Especialidade(IdEspecialidade),
+CRM VARCHAR(6) NOT NULL,
+NOME VARCHAR(256) NOT NULL,
+IDADE INT NOT NULL
+);
+CREATE TABLE tb_Paciente
+(
+IDPACIENTE INT PRIMARY KEY IDENTITY,
+IDPERFIL INT FOREIGN KEY REFERENCES tb_Perfil(IdPerfil),
+NOME VARCHAR(256) NOT NULL,
+Situacao bit default(1),
+PLANO_DE_SAUDE VARCHAR(256)
+);
+CREATE TABLE tb_consulta
+(
+IdConsulta INT PRIMARY KEY IDENTITY,
+IdMedico INT FOREIGN KEY REFERENCES tb_Medico(IdMedico),
+IdPaciente INT FOREIGN KEY REFERENCES tb_Paciente(IdPaciente),
+Datacons DATE NOT NULL,
+HORARIO TIME NOT NULL,
+DESCRICAO TEXT NOT NULL
+);
+
+CREATE TABLE tb_Prontuario
+(
+IdProntuario INT PRIMARY KEY IDENTITY,
+IdPaciente INT FOREIGN KEY REFERENCES tb_Paciente(IdPaciente),
+IdConsulta INT FOREIGN KEY REFERENCES tb_Consulta(IdConsulta),
+ENCAMINHAMENTO VARCHAR(256) NOT NULL,
+DESCRICAO VARCHAR(8000) NOT NULL
+)
+
+CREATE TABLE tb_Medico_Prontuario
+(
+IdMedicoProntuario INT PRIMARY KEY IDENTITY,
+IdMedico INT FOREIGN KEY REFERENCES tb_Medico(IdMedico),
+IdProntuario int FOREIGN KEY REFERENCES tb_Prontuario(IdProntuario)
+);
+
+CREATE TABLE tb_FEEDBACK
+(
+IdFededback INT PRIMARY KEY IDENTITY,
+IdPaciente INT FOREIGN KEY REFERENCES tb_Paciente(IdPaciente),
+IdConsulta INT FOREIGN KEY REFERENCES tb_consulta(IdConsulta),
+Descricao TEXT NOT NULL,
+);
+
+CREATE TABLE tb_ADM
+(
+IdAdm INT PRIMARY KEY IDENTITY,
+IdPerfil INT FOREIGN KEY REFERENCES tb_Perfil(IdPerfil),
+Nome varchar (256) NOT NULL,
+)
+
+CREATE TABLE tb_Agendamento
+(
+IdAgendamento INT PRIMARY KEY IDENTITY,
+IdAdm INT FOREIGN KEY REFERENCES tb_ADM(IdAdm),
+datadaconsulta DATE NOT NULL
+)
+
+CREATE TABLE tb_clinica
+(
+IdClinica INT PRIMARY KEY IDENTITY,
+Endereco VARCHAR (256) NOT NULL,
+HorariOfuncionamento TIME NOT NULL,
+CNPJ VARCHAR(16) NOT NULL,
+NomeFantasia VARCHAR (256) NOT NULL,
+)
